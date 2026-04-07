@@ -1,0 +1,1626 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Salesforce ES POC Portfolio - Roopmathi Gunna</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-blue: #2B579A;
+            --secondary-teal: #0B827C;
+            --dark-bg: #1e1e1e;
+            --light-bg: #f5f5f5;
+            --text-dark: #1a1a1a;
+            --text-light: #f0f0f0;
+            --border-color: #e0e0e0;
+            --code-bg: #2d2d2d;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            line-height: 1.6;
+            color: var(--text-dark);
+            background-color: #ffffff;
+            padding-top: 70px;
+        }
+
+        /* Header & Navigation */
+        header {
+            background: linear-gradient(135deg, var(--primary-blue) 0%, #1a3a5c 100%);
+            color: white;
+            padding: 3rem 2rem;
+            text-align: center;
+            margin-bottom: 2rem;
+            position: relative;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            letter-spacing: -0.5px;
+        }
+
+        header .subtitle {
+            font-size: 1.1rem;
+            opacity: 0.95;
+            margin-bottom: 1rem;
+        }
+
+        header .metadata {
+            font-size: 0.95rem;
+            opacity: 0.9;
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+            margin-top: 1.5rem;
+        }
+
+        header .metadata div {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        header .metadata strong {
+            display: block;
+            font-size: 0.85rem;
+            opacity: 0.85;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.25rem;
+        }
+
+        /* Sticky Navigation Bar */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            padding: 0 2rem;
+            height: 70px;
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        nav .logo {
+            font-weight: 700;
+            color: var(--primary-blue);
+            font-size: 1.1rem;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 1.5rem;
+            margin: 0;
+            padding: 0;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: var(--text-dark);
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: color 0.3s ease;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+        }
+
+        nav a:hover {
+            color: var(--primary-blue);
+            background-color: rgba(43, 87, 154, 0.1);
+        }
+
+        nav a.active {
+            color: var(--primary-blue);
+            border-bottom: 2px solid var(--primary-blue);
+        }
+
+        /* Main Content */
+        main {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem 4rem;
+        }
+
+        .executive-summary {
+            background: linear-gradient(135deg, rgba(43, 87, 154, 0.05) 0%, rgba(11, 130, 124, 0.05) 100%);
+            border-left: 4px solid var(--primary-blue);
+            padding: 2rem;
+            margin-bottom: 3rem;
+            border-radius: 4px;
+            line-height: 1.8;
+        }
+
+        .executive-summary h2 {
+            color: var(--primary-blue);
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .executive-summary p {
+            margin-bottom: 1rem;
+        }
+
+        /* POC Sections */
+        .poc-section {
+            margin-bottom: 4rem;
+            scroll-margin-top: 80px;
+        }
+
+        .poc-section h2 {
+            color: var(--primary-blue);
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 3px solid var(--secondary-teal);
+        }
+
+        .poc-section h3 {
+            color: var(--primary-blue);
+            font-size: 1.3rem;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .poc-section h4 {
+            color: #444;
+            font-size: 1.05rem;
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .poc-section p {
+            margin-bottom: 1rem;
+            line-height: 1.7;
+        }
+
+        .poc-section ul, .poc-section ol {
+            margin-left: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .poc-section li {
+            margin-bottom: 0.5rem;
+            line-height: 1.6;
+        }
+
+        /* Details/Summary Collapsible Sections */
+        details {
+            background: var(--light-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            margin-bottom: 1.5rem;
+            overflow: hidden;
+        }
+
+        summary {
+            background: linear-gradient(to right, rgba(43, 87, 154, 0.08), rgba(11, 130, 124, 0.08));
+            padding: 1rem 1.5rem;
+            cursor: pointer;
+            user-select: none;
+            font-weight: 600;
+            color: var(--primary-blue);
+            display: flex;
+            align-items: center;
+            transition: background-color 0.3s ease;
+        }
+
+        summary:hover {
+            background: linear-gradient(to right, rgba(43, 87, 154, 0.12), rgba(11, 130, 124, 0.12));
+        }
+
+        summary::marker {
+            color: var(--secondary-teal);
+        }
+
+        details > div {
+            padding: 1.5rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        /* Code Blocks */
+        pre {
+            background-color: var(--code-bg);
+            color: var(--text-light);
+            padding: 1.5rem;
+            border-radius: 4px;
+            overflow-x: auto;
+            margin-bottom: 1.5rem;
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            border-left: 4px solid var(--secondary-teal);
+        }
+
+        code {
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+        }
+
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 1.5rem;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        thead {
+            background: linear-gradient(to right, var(--primary-blue), #1a3a5c);
+            color: white;
+        }
+
+        th {
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+            border: 1px solid var(--border-color);
+        }
+
+        td {
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--border-color);
+            line-height: 1.6;
+        }
+
+        tbody tr:nth-child(odd) {
+            background-color: rgba(43, 87, 154, 0.03);
+        }
+
+        tbody tr:hover {
+            background-color: rgba(43, 87, 154, 0.08);
+        }
+
+        /* Mermaid Diagrams */
+        .mermaid-container {
+            background: white;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            justify-content: center;
+            overflow-x: auto;
+        }
+
+        .mermaid {
+            display: flex;
+            justify-content: center;
+        }
+
+        /* Problem Statement Boxes */
+        .problem-box {
+            background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
+            border-left: 4px solid #ff9800;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border-radius: 4px;
+        }
+
+        .solution-box {
+            background: linear-gradient(135deg, #d1ecf1 0%, #bee5eb 100%);
+            border-left: 4px solid var(--secondary-teal);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border-radius: 4px;
+        }
+
+        /* Roadmap Styling */
+        .roadmap {
+            margin-bottom: 1.5rem;
+        }
+
+        .roadmap-phase {
+            background: white;
+            border: 2px solid var(--border-color);
+            border-left: 4px solid var(--primary-blue);
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            border-radius: 4px;
+        }
+
+        .roadmap-phase h5 {
+            color: var(--primary-blue);
+            margin-bottom: 0.75rem;
+            font-size: 1.1rem;
+        }
+
+        .roadmap-phase ul {
+            margin-left: 1.5rem;
+        }
+
+        .roadmap-phase li {
+            margin-bottom: 0.4rem;
+        }
+
+        /* Impact Box */
+        .impact-box {
+            background: linear-gradient(135deg, #c8e6c9 0%, #a5d6a7 100%);
+            border-left: 4px solid #4caf50;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border-radius: 4px;
+        }
+
+        .impact-box h4 {
+            color: #1b5e20;
+            margin-bottom: 1rem;
+        }
+
+        .impact-box ul {
+            margin-left: 1.5rem;
+        }
+
+        .impact-box li {
+            margin-bottom: 0.6rem;
+            color: #1b5e20;
+            font-weight: 500;
+        }
+
+        /* Connection Diagram */
+        .connection-diagram {
+            background: linear-gradient(135deg, rgba(43, 87, 154, 0.05) 0%, rgba(11, 130, 124, 0.05) 100%);
+            border: 2px solid var(--primary-blue);
+            border-radius: 4px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .connection-diagram h3 {
+            text-align: center;
+            color: var(--primary-blue);
+            margin-bottom: 1.5rem;
+        }
+
+        /* About Author */
+        .about-author {
+            background: linear-gradient(135deg, rgba(43, 87, 154, 0.08) 0%, rgba(11, 130, 124, 0.08) 100%);
+            border: 2px solid var(--primary-blue);
+            border-radius: 4px;
+            padding: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .about-author h2 {
+            color: var(--primary-blue);
+            margin-bottom: 1rem;
+        }
+
+        .about-author p {
+            margin-bottom: 1rem;
+            line-height: 1.8;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--primary-blue);
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 4rem;
+            border-top: 4px solid var(--secondary-teal);
+        }
+
+        footer p {
+            margin-bottom: 0.5rem;
+        }
+
+        footer a {
+            color: #ffd700;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* Print Styles */
+        @media print {
+            body {
+                padding-top: 0;
+            }
+
+            nav {
+                display: none;
+            }
+
+            header {
+                page-break-after: avoid;
+            }
+
+            .poc-section {
+                page-break-inside: avoid;
+            }
+
+            details {
+                border: 1px solid #ccc;
+            }
+
+            pre {
+                background-color: #f5f5f5;
+                color: var(--text-dark);
+                border: 1px solid #ddd;
+            }
+
+            a {
+                color: var(--primary-blue);
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 1.8rem;
+            }
+
+            nav {
+                padding: 0 1rem;
+                gap: 1rem;
+            }
+
+            nav ul {
+                gap: 0.75rem;
+            }
+
+            nav a {
+                padding: 0.4rem 0.6rem;
+                font-size: 0.85rem;
+            }
+
+            main {
+                padding: 0 1rem 2rem;
+            }
+
+            header .metadata {
+                gap: 1rem;
+                flex-direction: column;
+            }
+
+            .poc-section h2 {
+                font-size: 1.5rem;
+            }
+
+            .poc-section h3 {
+                font-size: 1.1rem;
+            }
+
+            table {
+                font-size: 0.9rem;
+            }
+
+            th, td {
+                padding: 0.6rem;
+            }
+
+            pre {
+                font-size: 0.8rem;
+                padding: 1rem;
+            }
+        }
+
+        /* Syntax Highlighting for Code */
+        .keyword {
+            color: #569cd6;
+        }
+
+        .string {
+            color: #ce9178;
+        }
+
+        .comment {
+            color: #6a9955;
+        }
+
+        .function {
+            color: #dcdcaa;
+        }
+
+        .number {
+            color: #b5cea8;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav>
+        <div class="logo">POC Portfolio</div>
+        <ul>
+            <li><a href="#poc-1" onclick="setActive(event)">POC 1: Data360</a></li>
+            <li><a href="#poc-2" onclick="setActive(event)">POC 2: Metrics</a></li>
+            <li><a href="#poc-3" onclick="setActive(event)">POC 3: Pulse Agent</a></li>
+            <li><a href="#how-connected" onclick="setActive(event)">Connection</a></li>
+        </ul>
+    </nav>
+
+    <!-- Header -->
+    <header>
+        <h1>POC Portfolio: Data & AI Solutions for Salesforce Employee Success</h1>
+        <p class="subtitle">A comprehensive proposal for enterprise-scale people analytics and agentic intelligence</p>
+        <div class="metadata">
+            <div>
+                <strong>Prepared by</strong>
+                Roopmathi (Ruby) Gunna
+            </div>
+            <div>
+                <strong>For</strong>
+                Lead Data Engineer — ES Product Management, Salesforce
+            </div>
+            <div>
+                <strong>Date</strong>
+                April 7, 2026
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <!-- Executive Summary -->
+        <section class="executive-summary">
+            <h2>Executive Summary</h2>
+            <p>This portfolio presents three interconnected proof-of-concept designs addressing critical data engineering and AI challenges facing Salesforce's Employee Success (ES) team. Each POC is grounded in real-world patterns built and deployed in production at scale — reframed for the ES team's specific needs. Together, they form a connected architecture: POC 1 integrates the data, POC 2 defines the metrics, and POC 3 delivers intelligent insights — a complete data-to-AI pipeline for People Analytics.</p>
+        </section>
+
+        <!-- POC 1 Section -->
+        <section class="poc-section" id="poc-1">
+            <h2>POC 1: ES Data360 Unifier</h2>
+            <p style="font-style: italic; color: #666; margin-bottom: 1.5rem;">Metadata-Driven HR Data Integration & Governance Pipeline</p>
+
+            <!-- Problem Statement -->
+            <div class="problem-box">
+                <h3 style="margin-top: 0; color: #b85f00;">Problem Statement</h3>
+                <p>Salesforce's Employee Success team integrates data from 15+ HR systems — Workday HCM, ServiceNow HRSD, payroll, benefits administration, engagement surveys, learning platforms, and more. Each system has different schemas, update frequencies, and data quality characteristics. Key challenges include:</p>
+                <ul>
+                    <li><strong>Identity Resolution:</strong> Employee records exist in multiple formats across systems ("William J. Smith" vs. "Smith, W. J." vs. "Bill Smith")</li>
+                    <li><strong>PII Governance Overhead:</strong> HR data contains SSN, salary, health info, performance ratings — every new analytics use case requires legal review, adding 30-40% to platform costs</li>
+                    <li><strong>Schema Drift:</strong> Source systems evolve independently; pipelines break silently</li>
+                    <li><strong>No Unified Employee Profile:</strong> Cannot combine engagement, compensation, performance, and attrition signals into a single view</li>
+                </ul>
+            </div>
+
+            <!-- Proposed Solution -->
+            <div class="solution-box">
+                <h3 style="margin-top: 0; color: #0b5563;">Proposed Solution</h3>
+                <p>A metadata-driven integration framework that automatically discovers, classifies, governs, and unifies HR data from multiple sources into a medallion architecture (Bronze → Silver → Gold) with automated PII detection, field-level encryption, and governance tagging.</p>
+            </div>
+
+            <!-- Architecture Diagram -->
+            <h3>Architecture Diagram</h3>
+            <div class="mermaid-container">
+                <div class="mermaid">
+graph TB
+    subgraph Sources["Data Sources"]
+        W["Workday HCM"]
+        SN["ServiceNow HRSD"]
+        Q["Qualtrics Surveys"]
+        SL["Slack Activity"]
+        P["Payroll Systems"]
+        L["Learning Platforms"]
+    end
+
+    subgraph Ingestion["Ingestion Layer"]
+        MC["Master Controller<br/>YAML Config per Source"]
+        API["API Connectors<br/>REST / CDC / Batch"]
+        PII["PII Auto-Classifier<br/>NLP + Regex"]
+    end
+
+    subgraph Bronze["Bronze Layer - Raw"]
+        B1["Raw Employee Records"]
+        B2["Raw Survey Responses"]
+        B3["Raw Activity Logs"]
+        BM["Bronze Metadata<br/>Source, Timestamp, Schema Version"]
+    end
+
+    subgraph Silver["Silver Layer - Cleaned & Governed"]
+        IR["Identity Resolution<br/>Probabilistic Matching"]
+        DQ["Data Quality<br/>Validation Rules"]
+        ENC["Field-Level Encryption<br/>PII Fields"]
+        GT["Governance Tags<br/>Access Control"]
+        S1["Unified Employee Profile"]
+        S2["Cleaned Survey Data"]
+        S3["Normalized Activity"]
+    end
+
+    subgraph Gold["Gold Layer - Business Ready"]
+        G1["Employee 360 View"]
+        G2["Attrition Feature Store"]
+        G3["Engagement Metrics"]
+        G4["Compensation Analytics"]
+    end
+
+    W & SN & Q & SL & P & L --> MC
+    MC --> API
+    API --> PII
+    PII --> B1 & B2 & B3
+    B1 & B2 & B3 --> BM
+    BM --> IR & DQ
+    IR --> ENC
+    DQ --> ENC
+    ENC --> GT
+    GT --> S1 & S2 & S3
+    S1 & S2 & S3 --> G1 & G2 & G3 & G4
+                </div>
+            </div>
+
+            <!-- Technical Approach -->
+            <h3>Technical Approach</h3>
+
+            <details>
+                <summary>Master Controller Framework (YAML-Driven)</summary>
+                <div>
+                    <p>Configuration-as-code pattern for declarative, version-controlled data ingestion:</p>
+                    <pre><span class="comment"># master_config/workday_hcm.yaml</span>
+<span class="keyword">source:</span>
+  <span class="keyword">name:</span> workday_hcm
+  <span class="keyword">type:</span> api
+  <span class="keyword">connection:</span>
+    <span class="keyword">base_url:</span> <span class="string">"https://wd5-impl.workday.com/ccx/api/v1"</span>
+    <span class="keyword">auth:</span> oauth2
+    <span class="keyword">credentials_ref:</span> <span class="string">"vault://es-secrets/workday-oauth"</span>
+
+  <span class="keyword">ingestion:</span>
+    <span class="keyword">mode:</span> incremental  <span class="comment"># full | incremental | cdc</span>
+    <span class="keyword">schedule:</span> <span class="string">"0 2 * * *"</span>  <span class="comment"># Daily at 2 AM</span>
+    <span class="keyword">watermark_column:</span> <span class="string">"last_modified_date"</span>
+    <span class="keyword">batch_size:</span> 10000
+
+  <span class="keyword">schema:</span>
+    <span class="keyword">version:</span> <span class="string">"3.2"</span>
+    <span class="keyword">drift_detection:</span> <span class="keyword">true</span>
+    <span class="keyword">evolution_strategy:</span> merge  <span class="comment"># merge | strict | log_only</span>
+
+  <span class="keyword">pii_classification:</span>
+    <span class="keyword">auto_detect:</span> <span class="keyword">true</span>
+    <span class="keyword">known_pii_fields:</span>
+      <span class="keyword">- employee_ssn:</span> ssn
+      <span class="keyword">- date_of_birth:</span> dob
+      <span class="keyword">- home_address:</span> address
+      <span class="keyword">- salary:</span> compensation
+    <span class="keyword">encryption:</span> fernet
+    <span class="keyword">key_ref:</span> <span class="string">"vault://es-secrets/pii-encryption-key"</span>
+
+  <span class="keyword">governance:</span>
+    <span class="keyword">owner:</span> <span class="string">"es-people-analytics"</span>
+    <span class="keyword">access_tier:</span> restricted
+    <span class="keyword">tags:</span>
+      <span class="keyword">- data_domain:</span> employee_master
+      <span class="keyword">- sensitivity:</span> high
+      <span class="keyword">- retention_days:</span> 2555  <span class="comment"># 7 years</span>
+      <span class="keyword">- gdpr_relevant:</span> <span class="keyword">true</span>
+
+  <span class="keyword">quality_rules:</span>
+    <span class="keyword">- rule:</span> not_null
+      <span class="keyword">columns:</span> [employee_id, hire_date, department_code]
+    <span class="keyword">- rule:</span> unique
+      <span class="keyword">columns:</span> [employee_id]
+    <span class="keyword">- rule:</span> referential_integrity
+      <span class="keyword">column:</span> manager_id
+      <span class="keyword">reference:</span> employee_id
+    <span class="keyword">- rule:</span> range_check
+      <span class="keyword">column:</span> salary
+      <span class="keyword">min:</span> 0
+      <span class="keyword">max:</span> 10000000</pre>
+                </div>
+            </details>
+
+            <details>
+                <summary>Identity Resolution Engine</summary>
+                <div>
+                    <p>Probabilistic identity resolution for HR data across multiple source systems with confidence scoring:</p>
+                    <pre><span class="comment"># identity_resolution/probabilistic_matcher.py</span>
+<span class="string">"""
+Probabilistic identity resolution for HR data across multiple source systems.
+Handles: name variations, cultural name orders, nickname matching,
+and fuzzy matching with confidence scoring.
+"""</span>
+
+<span class="keyword">from</span> dataclasses <span class="keyword">import</span> dataclass
+<span class="keyword">from</span> typing <span class="keyword">import</span> List, Tuple
+
+@<span class="function">dataclass</span>
+<span class="keyword">class</span> <span class="function">EmployeeCandidate</span>:
+    source_system: str
+    source_id: str
+    first_name: str
+    last_name: str
+    email: str
+    department: str
+    hire_date: str
+
+<span class="keyword">class</span> <span class="function">IdentityResolver</span>:
+    <span class="string">"""
+    Multi-strategy identity resolution pipeline.
+
+    Strategy 1: Deterministic — exact match on employee_id or email
+    Strategy 2: Probabilistic — weighted scoring on name, dept, hire_date
+    Strategy 3: NLP-assisted — handles cultural name variations, nicknames
+    """</span>
+
+    CONFIDENCE_THRESHOLD = <span class="number">0.85</span>
+    MANUAL_REVIEW_THRESHOLD = <span class="number">0.65</span>
+
+    WEIGHTS = {
+        <span class="string">'email_exact'</span>: <span class="number">0.40</span>,
+        <span class="string">'name_similarity'</span>: <span class="number">0.25</span>,
+        <span class="string">'department_match'</span>: <span class="number">0.15</span>,
+        <span class="string">'hire_date_match'</span>: <span class="number">0.15</span>,
+        <span class="string">'source_id_pattern'</span>: <span class="number">0.05</span>
+    }
+
+    <span class="keyword">def</span> <span class="function">resolve</span>(<span class="keyword">self</span>, candidates: List[EmployeeCandidate]):
+        <span class="string">"""
+        Three-pass resolution:
+        Pass 1: Deterministic matching (email, employee ID)
+        Pass 2: Probabilistic matching (fuzzy name + dept + hire date)
+        Pass 3: Flag low-confidence matches for manual review
+        """</span>
+        results = []
+        unmatched = list(candidates)
+
+        <span class="comment"># Pass 1: Deterministic</span>
+        deterministic_groups = <span class="keyword">self</span>._deterministic_match(unmatched)
+        <span class="keyword">for</span> group <span class="keyword">in</span> deterministic_groups:
+            golden_id = <span class="keyword">self</span>._generate_golden_id(group)
+            results.append(MatchResult(
+                golden_id=golden_id,
+                candidates=group,
+                confidence=<span class="number">1.0</span>,
+                match_method=<span class="string">'deterministic'</span>
+            ))
+
+        <span class="comment"># Pass 2: Probabilistic</span>
+        probabilistic_groups = <span class="keyword">self</span>._probabilistic_match(unmatched)
+        <span class="keyword">for</span> group, score <span class="keyword">in</span> probabilistic_groups:
+            <span class="keyword">if</span> score >= <span class="keyword">self</span>.CONFIDENCE_THRESHOLD:
+                <span class="comment"># High confidence → approve</span>
+                results.append(...)
+            <span class="keyword">elif</span> score >= <span class="keyword">self</span>.MANUAL_REVIEW_THRESHOLD:
+                <span class="comment"># Medium confidence → flag for review</span>
+                results.append(...)
+
+        <span class="keyword">return</span> results</pre>
+                </div>
+            </details>
+
+            <details>
+                <summary>Automated PII Classification</summary>
+                <div>
+                    <p>NLP-based and regex pattern matching for automatic sensitive field detection:</p>
+                    <pre><span class="comment"># governance/pii_classifier.py</span>
+PII_PATTERNS = {
+    <span class="string">'ssn'</span>: <span class="string">r'\b\d{3}-?\d{2}-?\d{4}\b'</span>,
+    <span class="string">'email'</span>: <span class="string">r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b'</span>,
+    <span class="string">'phone'</span>: <span class="string">r'\b\d{3}[-.]?\d{3}[-.]?\d{4}\b'</span>,
+    <span class="string">'date_of_birth'</span>: <span class="string">r'\b(0[1-9]|1[0-2])/(0[1-9]|[12]\d|3[01])/\d{4}\b'</span>,
+    <span class="string">'salary'</span>: <span class="string">r'\$[\d,]+\.?\d{0,2}'</span>,
+    <span class="string">'bank_account'</span>: <span class="string">r'\b\d{8,17}\b'</span>
+}
+
+SENSITIVE_COLUMN_NAMES = {
+    <span class="string">'high'</span>: [<span class="string">'ssn'</span>, <span class="string">'social_security'</span>, <span class="string">'salary'</span>, <span class="string">'compensation'</span>],
+    <span class="string">'medium'</span>: [<span class="string">'date_of_birth'</span>, <span class="string">'home_address'</span>, <span class="string">'phone'</span>],
+    <span class="string">'low'</span>: [<span class="string">'department'</span>, <span class="string">'job_title'</span>, <span class="string">'hire_date'</span>]
+}
+
+<span class="keyword">def</span> <span class="function">classify_and_tag</span>(dataframe, source_config):
+    <span class="string">"""
+    Scan DataFrame columns for PII, apply governance tags,
+    and encrypt high-sensitivity fields.
+    """</span>
+    audit_log = []
+
+    <span class="keyword">for</span> column <span class="keyword">in</span> dataframe.columns:
+        sensitivity = _detect_sensitivity(column, dataframe[column])
+
+        <span class="comment"># Tag the column in metadata catalog</span>
+        tag_in_catalog(
+            column=column,
+            sensitivity=sensitivity,
+            source=source_config[<span class="string">'source'</span>][<span class="string">'name'</span>]
+        )
+
+        <span class="comment"># Encrypt high-sensitivity fields</span>
+        <span class="keyword">if</span> sensitivity == <span class="string">'high'</span>:
+            dataframe[column] = encrypt_field(dataframe[column])
+            audit_log.append({
+                <span class="string">'action'</span>: <span class="string">'encrypt'</span>,
+                <span class="string">'column'</span>: column,
+                <span class="string">'sensitivity'</span>: sensitivity
+            })
+
+    <span class="keyword">return</span> dataframe, audit_log</pre>
+                </div>
+            </details>
+
+            <!-- Salesforce Platform Mapping -->
+            <h3>Salesforce Platform Mapping</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>My Implementation (Today)</th>
+                        <th>Salesforce ES Production</th>
+                        <th>Notes</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>YAML Master Controller configs</td>
+                        <td><strong>Salesforce Flow</strong> + <strong>MuleSoft</strong> integration recipes</td>
+                        <td>Same pattern: declarative, config-driven orchestration</td>
+                    </tr>
+                    <tr>
+                        <td>Medallion Architecture (Bronze/Silver/Gold)</td>
+                        <td><strong>Data360</strong> lakehouse layers (Apache Iceberg/Parquet)</td>
+                        <td>Identical medallion concept; Data360 uses Iceberg natively</td>
+                    </tr>
+                    <tr>
+                        <td>Unity Catalog governance tags</td>
+                        <td><strong>Data360 governance</strong> with zero-trust architecture</td>
+                        <td>Both: tag-based access control, lineage, sensitivity classification</td>
+                    </tr>
+                    <tr>
+                        <td>Fernet encryption for PII fields</td>
+                        <td><strong>Data360 AI-driven governance</strong> + <strong>Shield Platform Encryption</strong></td>
+                        <td>Data360 adds AI-based auto-classification — same outcome, richer tooling</td>
+                    </tr>
+                    <tr>
+                        <td>PySpark identity resolution</td>
+                        <td><strong>Data360 identity resolution</strong> + <strong>APEX</strong> matching rules</td>
+                        <td>Can implement matching logic in APEX or leverage Data360's built-in resolution</td>
+                    </tr>
+                    <tr>
+                        <td>Databricks DLT for CDC processing</td>
+                        <td><strong>Data360 CDC connectors</strong> + <strong>Change Data Capture</strong> streams</td>
+                        <td>Data360 supports real-time CDC natively</td>
+                    </tr>
+                    <tr>
+                        <td>GitHub Actions CI/CD</td>
+                        <td><strong>Salesforce DX</strong> + <strong>DevOps Center</strong></td>
+                        <td>Same concept: version-controlled, automated deployments</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <!-- Implementation Roadmap -->
+            <h3>Implementation Roadmap</h3>
+            <div class="roadmap">
+                <div class="roadmap-phase">
+                    <h5>Phase 1 (Weeks 1-4): Foundation</h5>
+                    <ul>
+                        <li>Deploy Master Controller config framework on Data360</li>
+                        <li>Build API connectors for top 3 HR sources (Workday, ServiceNow, Payroll)</li>
+                        <li>Implement PII auto-classification and governance tagging</li>
+                        <li>Establish Bronze layer with schema versioning</li>
+                    </ul>
+                </div>
+                <div class="roadmap-phase">
+                    <h5>Phase 2 (Weeks 5-8): Identity & Quality</h5>
+                    <ul>
+                        <li>Deploy identity resolution engine for unified employee profiles</li>
+                        <li>Implement data quality validation rules per source</li>
+                        <li>Build Silver layer with field-level encryption</li>
+                        <li>Create audit trail and compliance reporting</li>
+                    </ul>
+                </div>
+                <div class="roadmap-phase">
+                    <h5>Phase 3 (Weeks 9-12): Business-Ready</h5>
+                    <ul>
+                        <li>Build Gold layer: Employee 360 view, feature store, engagement metrics</li>
+                        <li>Enable self-service data access with governance controls</li>
+                        <li>Document and hand off to broader ES data team</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Expected Impact -->
+            <div class="impact-box">
+                <h4>Expected Impact</h4>
+                <ul>
+                    <li><strong>80% reduction</strong> in manual data integration effort (based on SMBC results)</li>
+                    <li><strong>Unified employee profile</strong> across 15+ systems with >95% identity resolution accuracy</li>
+                    <li><strong>Automated PII governance</strong> eliminating 3-6 month legal review delays for new use cases</li>
+                    <li><strong>Foundation for POC 2 and POC 3</strong> — metrics and AI agents built on trusted, governed data</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- POC 2 Section -->
+        <section class="poc-section" id="poc-2">
+            <h2>POC 2: ES Metrics Semantic Layer</h2>
+            <p style="font-style: italic; color: #666; margin-bottom: 1.5rem;">Unified People Analytics Metrics Engine</p>
+
+            <!-- Problem Statement -->
+            <div class="problem-box">
+                <h3 style="margin-top: 0; color: #b85f00;">Problem Statement</h3>
+                <p>The ES People Analytics team reports that "attrition" means different things to different stakeholders — voluntary vs. involuntary, by tenure, by department, regretted vs. non-regretted. "Engagement" is calculated differently across survey tools. "Cost per hire" includes different cost components depending on who's asking. 80% of data engineers report poor alignment between People Analytics and IT on metric definitions. This creates:</p>
+                <ul>
+                    <li><strong>Decision paralysis:</strong> Leaders don't trust the numbers</li>
+                    <li><strong>Duplicated effort:</strong> Multiple teams computing the same metrics differently</li>
+                    <li><strong>AI model drift:</strong> ML models trained on inconsistent metric definitions produce unreliable predictions</li>
+                    <li><strong>Reporting bottleneck:</strong> Every new dashboard requires re-deriving metrics from scratch</li>
+                </ul>
+            </div>
+
+            <!-- Proposed Solution -->
+            <div class="solution-box">
+                <h3 style="margin-top: 0; color: #0b5563;">Proposed Solution</h3>
+                <p>A centralized semantic metrics layer that defines, versions, validates, and serves People Analytics metrics — with data lineage, automated quality checks, and a self-service API that both dashboards and AI agents consume from a single source of truth.</p>
+            </div>
+
+            <!-- Architecture Diagram -->
+            <h3>Architecture Diagram</h3>
+            <div class="mermaid-container">
+                <div class="mermaid">
+graph TB
+    subgraph Gold["Gold Layer from POC 1"]
+        E360["Employee 360 View"]
+        COMP["Compensation Data"]
+        ENG["Engagement Survey Data"]
+        PERF["Performance Data"]
+        EXIT["Exit Interview Data"]
+    end
+
+    subgraph MetricDef["Metric Definition Layer"]
+        MD["Metric Definitions<br/>YAML/Version Controlled"]
+        VAL["Validation Engine<br/>Automated Quality Checks"]
+        LIN["Lineage Tracker<br/>Table → Metric → Dashboard"]
+    end
+
+    subgraph Compute["Metric Computation Engine"]
+        ATT["Attrition Metrics<br/>voluntary, involuntary,<br/>regretted, by cohort"]
+        ENGA["Engagement Metrics<br/>eNPS, satisfaction,<br/>sentiment score"]
+        CPH["Cost Metrics<br/>cost-per-hire,<br/>cost-of-attrition"]
+        MGR["Manager Metrics<br/>effectiveness score,<br/>team health index"]
+        DIV["DEI Metrics<br/>pay equity ratio,<br/>representation index"]
+    end
+
+    subgraph Consumption["Consumption Layer"]
+        DASH["Dashboards<br/>Tableau / CRM Analytics"]
+        AGENT["Agentforce Agents<br/>Natural Language Queries"]
+        ML["ML Feature Store<br/>Attrition & Engagement Models"]
+        API2["Self-Service API<br/>Governed Access"]
+    end
+
+    E360 & COMP & ENG & PERF & EXIT --> MD
+    MD --> VAL
+    VAL --> LIN
+    LIN --> ATT & ENGA & CPH & MGR & DIV
+    ATT & ENGA & CPH & MGR & DIV --> DASH & AGENT & ML & API2
+                </div>
+            </div>
+
+            <!-- Technical Approach -->
+            <h3>Technical Approach</h3>
+
+            <details>
+                <summary>Metric Definition Schema (Version-Controlled)</summary>
+                <div>
+                    <p>Example: Voluntary Attrition Rate metric with full business definition, formula, dimensions, and quality checks:</p>
+                    <pre><span class="comment"># metrics/attrition/voluntary_attrition_rate.yaml</span>
+<span class="keyword">metric:</span>
+  <span class="keyword">name:</span> voluntary_attrition_rate
+  <span class="keyword">display_name:</span> <span class="string">"Voluntary Attrition Rate"</span>
+  <span class="keyword">version:</span> <span class="string">"2.1"</span>
+  <span class="keyword">owner:</span> es-people-analytics
+  <span class="keyword">description:</span> <span class="string">"Percentage of employees who voluntarily separated"</span>
+
+  <span class="keyword">formula:</span>
+    <span class="keyword">numerator:</span> <span class="string">"COUNT(separations WHERE separation_type = 'voluntary')"</span>
+    <span class="keyword">denominator:</span> <span class="string">"AVG(active_headcount)"</span>
+    <span class="keyword">expression:</span> <span class="string">"(numerator / denominator) * 100"</span>
+
+  <span class="keyword">dimensions:</span>
+    <span class="keyword">-</span> department
+    <span class="keyword">-</span> job_level
+    <span class="keyword">-</span> tenure_band
+    <span class="keyword">-</span> location
+    <span class="keyword">-</span> manager_id
+    <span class="keyword">-</span> gender
+    <span class="keyword">-</span> ethnicity
+
+  <span class="keyword">data_sources:</span>
+    <span class="keyword">primary:</span> gold.employee_360
+    <span class="keyword">supplementary:</span>
+      <span class="keyword">-</span> gold.separation_events
+      <span class="keyword">-</span> gold.headcount_snapshots
+
+  <span class="keyword">quality_checks:</span>
+    <span class="keyword">-</span> <span class="keyword">type:</span> range
+      <span class="keyword">expected:</span> <span class="string">"0-50%"</span>
+    <span class="keyword">-</span> <span class="keyword">type:</span> month_over_month_change
+      <span class="keyword">threshold:</span> <span class="string">"25%"</span>
+    <span class="keyword">-</span> <span class="keyword">type:</span> null_check
+      <span class="keyword">fields:</span> [separation_type, separation_date, employee_id]
+
+  <span class="keyword">access_control:</span>
+    <span class="keyword">base:</span> all_es_team
+    <span class="keyword">restricted_dimensions:</span>
+      <span class="keyword">ethnicity:</span> dei_reporting_group
+
+  <span class="keyword">changelog:</span>
+    <span class="keyword">-</span> <span class="keyword">version:</span> <span class="string">"2.1"</span>
+      <span class="keyword">date:</span> <span class="string">"2026-03-15"</span>
+      <span class="keyword">change:</span> <span class="string">"Added tenure_band dimension"</span></pre>
+                </div>
+            </details>
+
+            <details>
+                <summary>Metric Computation Engine</summary>
+                <div>
+                    <p>Centralized computation engine for People Analytics metrics with validation and lineage tracking:</p>
+                    <pre><span class="comment"># metrics/engine/compute.py</span>
+<span class="keyword">class</span> <span class="function">MetricEngine</span>:
+    <span class="string">"""
+    Core computation engine for People Analytics metrics.
+
+    Responsibilities:
+    - Parse metric YAML definitions
+    - Generate and execute SQL against Gold tables
+    - Run quality validation checks
+    - Track lineage from source tables → metrics → consumers
+    """</span>
+
+    <span class="keyword">def</span> <span class="function">compute_metric</span>(<span class="keyword">self</span>, metric_name: str,
+                       dimensions: list = None,
+                       date_range: tuple = None):
+        <span class="string">"""
+        Compute a metric by name with optional dimensional slicing.
+
+        Example:
+            engine.compute_metric(
+                'voluntary_attrition_rate',
+                dimensions=['department', 'tenure_band'],
+                date_range=('2025-04-01', '2026-03-31')
+            )
+        """</span>
+        definition = <span class="keyword">self</span>._load_definition(metric_name)
+
+        <span class="comment"># Generate SQL from YAML formula</span>
+        sql = <span class="keyword">self</span>._generate_sql(definition, dimensions, date_range)
+
+        <span class="comment"># Execute against Gold layer</span>
+        raw_result = <span class="keyword">self</span>._execute(sql)
+
+        <span class="comment"># Run quality checks</span>
+        quality_report = <span class="keyword">self</span>._validate(raw_result,
+                                         definition[<span class="string">'quality_checks'</span>])
+
+        <span class="keyword">if</span> quality_report.has_failures:
+            <span class="keyword">self</span>._alert_data_team(metric_name, quality_report)
+
+        <span class="comment"># Update lineage graph</span>
+        <span class="keyword">self</span>._update_lineage(metric_name, definition[<span class="string">'data_sources'</span>])
+
+        <span class="keyword">return</span> MetricResult(
+            metric_name=metric_name,
+            value=raw_result,
+            quality_status=quality_report.status,
+            definition_version=definition[<span class="string">'metric'</span>][<span class="string">'version'</span>]
+        )</pre>
+                </div>
+            </details>
+
+            <!-- Salesforce Platform Mapping -->
+            <h3>Salesforce Platform Mapping</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>My Implementation (Today)</th>
+                        <th>Salesforce ES Production</th>
+                        <th>Notes</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>YAML metric definitions in Git</td>
+                        <td><strong>Tableau Semantics</strong> (formerly Metrics Layer) in Data360</td>
+                        <td>Tableau Semantics is exactly this — centralized metric definitions with lineage</td>
+                    </tr>
+                    <tr>
+                        <td>Python metric computation engine</td>
+                        <td><strong>Data360 calculated insights</strong> + <strong>APEX</strong> triggers</td>
+                        <td>Data360 natively computes metrics; APEX handles custom business logic</td>
+                    </tr>
+                    <tr>
+                        <td>Custom SQL generation from YAML</td>
+                        <td><strong>Data360 SQL queries</strong> + <strong>Tableau Prep</strong></td>
+                        <td>Data360's query engine processes metrics at scale</td>
+                    </tr>
+                    <tr>
+                        <td>Quality validation checks</td>
+                        <td><strong>Data360 data quality rules</strong> + monitoring</td>
+                        <td>Built-in data quality framework with alerting</td>
+                    </tr>
+                    <tr>
+                        <td>Lineage tracking</td>
+                        <td><strong>Data360 lineage</strong> (native capability)</td>
+                        <td>Data360 provides automatic lineage from source to consumption</td>
+                    </tr>
+                    <tr>
+                        <td>API for metric consumption</td>
+                        <td><strong>Salesforce APIs</strong> + <strong>Connect REST API</strong></td>
+                        <td>Metrics served to Agentforce agents and dashboards via standard APIs</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <!-- Implementation Roadmap -->
+            <h3>Implementation Roadmap</h3>
+            <div class="roadmap">
+                <div class="roadmap-phase">
+                    <h5>Phase 1 (Weeks 1-3): Core Metrics</h5>
+                    <ul>
+                        <li>Define top 10 ES metrics in YAML with business stakeholders</li>
+                        <li>Build computation engine for attrition, engagement, headcount</li>
+                        <li>Deploy quality validation framework</li>
+                    </ul>
+                </div>
+                <div class="roadmap-phase">
+                    <h5>Phase 2 (Weeks 4-6): Dimensions & Lineage</h5>
+                    <ul>
+                        <li>Add dimensional slicing (department, level, tenure, location)</li>
+                        <li>Implement lineage tracking from Gold tables → metrics → dashboards</li>
+                        <li>Build self-service API for metric consumption</li>
+                    </ul>
+                </div>
+                <div class="roadmap-phase">
+                    <h5>Phase 3 (Weeks 7-9): Governance & Scale</h5>
+                    <ul>
+                        <li>Implement access controls for sensitive dimensions (DEI, individual)</li>
+                        <li>Add version control and changelog tracking</li>
+                        <li>Onboard POC 3 (ES Pulse Agent) as a metric consumer</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Expected Impact -->
+            <div class="impact-box">
+                <h4>Expected Impact</h4>
+                <ul>
+                    <li><strong>Single source of truth</strong> for all ES metrics — eliminating conflicting definitions</li>
+                    <li><strong>40% faster</strong> dashboard and report development (metrics pre-computed, not re-derived)</li>
+                    <li><strong>Trusted AI models</strong> — ML features built on governed, versioned metric definitions</li>
+                    <li><strong>Self-service</strong> — business users query metrics without engineering bottleneck</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- POC 3 Section -->
+        <section class="poc-section" id="poc-3">
+            <h2>POC 3: ES Pulse Agent</h2>
+            <p style="font-style: italic; color: #666; margin-bottom: 1.5rem;">Agentic Employee Sentiment & Attrition Intelligence</p>
+
+            <!-- Problem Statement -->
+            <div class="problem-box">
+                <h3 style="margin-top: 0; color: #b85f00;">Problem Statement</h3>
+                <p>Salesforce's ES People Analytics team (~40 specialists) spends significant time pulling static reports and answering ad-hoc questions from HR leadership: "Why did attrition spike in Engineering?" "What's driving low engagement in APAC?" "Which managers have the highest team turnover?" Current state:</p>
+                <ul>
+                    <li>Reports are static — follow-up questions require code changes</li>
+                    <li>Insights are discovered by accident; emerging problems are missed</li>
+                    <li>Unstructured data (survey comments, exit interviews) sits unused</li>
+                    <li>No proactive alerting — issues are discovered after they become crises</li>
+                    <li>Salesforce's Agentforce platform can enable conversational, autonomous insight delivery — but needs a purpose-built ES agent</li>
+                </ul>
+            </div>
+
+            <!-- Proposed Solution -->
+            <div class="solution-box">
+                <h3 style="margin-top: 0; color: #0b5563;">Proposed Solution</h3>
+                <p>An agentic AI system (deployable as an Agentforce agent) that ingests structured metrics and unstructured employee feedback, performs NLP-based sentiment analysis, and enables natural-language queries with autonomous multi-step reasoning — proactively surfacing attrition risks, engagement trends, and root-cause analysis.</p>
+            </div>
+
+            <!-- Architecture Diagram -->
+            <h3>Architecture Diagram</h3>
+            <div class="mermaid-container">
+                <div class="mermaid">
+graph TB
+    subgraph Foundation["Data Foundation from POC 1 & 2"]
+        MET["Semantic Metrics Layer<br/>Attrition, Engagement, DEI"]
+        E360["Employee 360 Profiles"]
+        SURV["Survey Comments<br/>Unstructured"]
+        EXIT2["Exit Interview Text<br/>Unstructured"]
+    end
+
+    subgraph NLP["NLP & Embedding Pipeline"]
+        SENT["Sentiment Analyzer<br/>LLM-based classification"]
+        EMB["Embedding Generator<br/>Text → Vectors"]
+        VDB["Vector Database<br/>Semantic Search Index"]
+        TOPIC["Topic Extractor<br/>Theme clustering"]
+    end
+
+    subgraph AgentCore["Agent Core - Agentforce Ready"]
+        REASON["Reasoning Engine<br/>Multi-step planning"]
+        TOOLS["Agent Tools<br/>Query metrics, search docs"]
+        GUARD["Guardrails<br/>PII filtering, access control"]
+        MEM["Conversation Memory<br/>Context across turns"]
+    end
+
+    subgraph Capabilities["Agent Capabilities"]
+        NLQ["Natural Language Queries<br/>'Why did attrition spike<br/>in Engineering?'"]
+        ALERT["Proactive Alerts<br/>'Team X engagement<br/>dropped 15% in 2 weeks'"]
+        RCA["Root Cause Analysis<br/>Autonomous multi-source<br/>correlation"]
+        REC["Recommendations<br/>'Implement stay bonuses<br/>for at-risk cohort'"]
+    end
+
+    MET & E360 & SURV & EXIT2 --> SENT & EMB
+    SENT --> TOPIC
+    EMB --> VDB
+    TOPIC & VDB & MET --> TOOLS
+    TOOLS --> REASON
+    REASON --> GUARD
+    GUARD --> MEM
+    MEM --> NLQ & ALERT & RCA & REC
+                </div>
+            </div>
+
+            <!-- Technical Approach -->
+            <h3>Technical Approach</h3>
+
+            <details>
+                <summary>Agent Topic & Action Definition (Agentforce Pattern)</summary>
+                <div>
+                    <p>Designed to map directly to Agentforce architecture with Topics, Actions, and Guardrails:</p>
+                    <pre><span class="comment"># agent/es_pulse_agent.py</span>
+<span class="string">"""
+ES Pulse Agent — Agentic Employee Sentiment & Attrition Intelligence
+Designed to map directly to Agentforce architecture
+"""</span>
+
+AGENT_TOPICS = {
+    <span class="string">"attrition_analysis"</span>: {
+        <span class="string">"description"</span>: <span class="string">"Analyze employee attrition patterns and root causes"</span>,
+        <span class="string">"triggers"</span>: [<span class="string">"attrition"</span>, <span class="string">"turnover"</span>, <span class="string">"leaving"</span>, <span class="string">"quit"</span>],
+        <span class="string">"instructions"</span>: <span class="string">"""
+            1. Query semantic metrics layer for quantitative data
+            2. Search exit interview embeddings for qualitative themes
+            3. Correlate with engagement survey sentiment
+            4. Identify top contributing factors with confidence scores
+            5. Compare to historical baselines and industry benchmarks
+            6. Suggest data-backed interventions
+        """</span>
+    },
+    <span class="string">"engagement_insights"</span>: {
+        <span class="string">"description"</span>: <span class="string">"Surface employee engagement trends and sentiment patterns"</span>,
+        <span class="string">"triggers"</span>: [<span class="string">"engagement"</span>, <span class="string">"satisfaction"</span>, <span class="string">"morale"</span>, <span class="string">"sentiment"</span>]
+    }
+}
+
+AGENT_ACTIONS = {
+    <span class="string">"query_metrics"</span>: {
+        <span class="string">"description"</span>: <span class="string">"Query the ES semantic metrics layer"</span>,
+        <span class="string">"function"</span>: <span class="string">"metric_engine.compute_metric"</span>,
+        <span class="string">"parameters"</span>: [<span class="string">"metric_name"</span>, <span class="string">"dimensions"</span>, <span class="string">"date_range"</span>]
+    },
+    <span class="string">"search_feedback"</span>: {
+        <span class="string">"description"</span>: <span class="string">"Semantic search across employee feedback"</span>,
+        <span class="string">"function"</span>: <span class="string">"vector_db.similarity_search"</span>,
+        <span class="string">"parameters"</span>: [<span class="string">"query"</span>, <span class="string">"filters"</span>, <span class="string">"top_k"</span>]
+    },
+    <span class="string">"detect_anomalies"</span>: {
+        <span class="string">"description"</span>: <span class="string">"Identify statistical anomalies in HR metrics"</span>,
+        <span class="string">"function"</span>: <span class="string">"anomaly_detector.detect"</span>,
+        <span class="string">"parameters"</span>: [<span class="string">"metric_name"</span>, <span class="string">"lookback_period"</span>]
+    }
+}
+
+AGENT_GUARDRAILS = {
+    <span class="string">"pii_protection"</span>: {
+        <span class="string">"rule"</span>: <span class="string">"Never expose individual employee names or IDs"</span>,
+        <span class="string">"action"</span>: <span class="string">"Aggregate to minimum group size of 5"</span>
+    },
+    <span class="string">"access_control"</span>: {
+        <span class="string">"rule"</span>: <span class="string">"Verify user's access level before returning sensitive dimensions"</span>,
+        <span class="string">"action"</span>: <span class="string">"Check user role against metric access_control definitions"</span>
+    },
+    <span class="string">"bias_detection"</span>: {
+        <span class="string">"rule"</span>: <span class="string">"Flag when recommendations may have demographic bias"</span>,
+        <span class="string">"action"</span>: <span class="string">"Run bias audit on any recommendation involving protected categories"</span>
+    }
+}</pre>
+                </div>
+            </details>
+
+            <details>
+                <summary>Adaptive RAG Pipeline (Self-Correcting Retrieval)</summary>
+                <div>
+                    <p>Implements self-correcting retrieval with relevance grading, query transformation, and multi-hop reasoning:</p>
+                    <pre><span class="comment"># agent/adaptive_rag.py</span>
+<span class="string">"""
+Adaptive RAG pipeline for ES Pulse Agent.
+Implements self-correcting retrieval with relevance grading,
+query transformation, and multi-hop reasoning.
+"""</span>
+
+<span class="keyword">from</span> langgraph.graph <span class="keyword">import</span> StateGraph, END
+
+<span class="keyword">def</span> <span class="function">build_es_pulse_graph</span>():
+    <span class="string">"""
+    Build the adaptive reasoning graph for ES Pulse Agent.
+
+    Flow:
+    1. Classify question → route to appropriate topic
+    2. Retrieve relevant context (metrics + unstructured feedback)
+    3. Grade retrieval relevance — if low, transform query and retry
+    4. Synthesize answer with confidence scoring
+    5. Self-check: does answer fully address the question?
+    6. If not, identify gaps and retrieve additional context
+    """</span>
+
+    graph = StateGraph(AgentState)
+
+    <span class="comment"># Add nodes for each step</span>
+    graph.add_node(<span class="string">"classify_question"</span>, classify_question)
+    graph.add_node(<span class="string">"retrieve_metrics"</span>, retrieve_metrics)
+    graph.add_node(<span class="string">"retrieve_feedback"</span>, retrieve_feedback)
+    graph.add_node(<span class="string">"grade_relevance"</span>, grade_relevance)
+    graph.add_node(<span class="string">"transform_query"</span>, transform_query)
+    graph.add_node(<span class="string">"synthesize_answer"</span>, synthesize_answer)
+    graph.add_node(<span class="string">"self_check"</span>, self_check)
+    graph.add_node(<span class="string">"apply_guardrails"</span>, apply_guardrails)
+
+    <span class="comment"># Set entry point</span>
+    graph.set_entry_point(<span class="string">"classify_question"</span>)
+    graph.add_edge(<span class="string">"classify_question"</span>, <span class="string">"retrieve_metrics"</span>)
+
+    <span class="comment"># Conditional edge: if retrieval quality is low, retry with transformed query</span>
+    graph.add_conditional_edges(
+        <span class="string">"grade_relevance"</span>,
+        <span class="keyword">lambda</span> state: <span class="string">"transform"</span>
+            <span class="keyword">if</span> state[<span class="string">"confidence"</span>] &lt; <span class="number">0.7</span>
+            <span class="keyword">else</span> <span class="string">"synthesize"</span>,
+        {<span class="string">"transform"</span>: <span class="string">"transform_query"</span>,
+         <span class="string">"synthesize"</span>: <span class="string">"synthesize_answer"</span>}
+    )
+
+    <span class="comment"># Self-check: is the answer complete?</span>
+    graph.add_conditional_edges(
+        <span class="string">"self_check"</span>,
+        <span class="keyword">lambda</span> state: <span class="string">"retrieve_more"</span>
+            <span class="keyword">if</span> <span class="keyword">not</span> state.get(<span class="string">"answer_complete"</span>, False)
+            <span class="keyword">else</span> <span class="string">"guardrails"</span>,
+        {<span class="string">"retrieve_more"</span>: <span class="string">"retrieve_metrics"</span>,
+         <span class="string">"guardrails"</span>: <span class="string">"apply_guardrails"</span>}
+    )
+
+    graph.add_edge(<span class="string">"apply_guardrails"</span>, END)
+
+    <span class="keyword">return</span> graph.compile()
+
+<span class="comment"># Example agent response:
+#
+# User: "Why did attrition spike 40% in Engineering last quarter?"
+#
+# Agent identifies root causes:
+# - New VP Engineering hired (org restructuring uncertainty) — 35% weight
+# - Compensation below market for ML Engineers — 28% weight
+# - 3 team leads departed in Dec (cascade effect) — 22% weight
+# - Remote work policy change announced Jan — 15% weight
+#
+# Returns data-backed analysis with recommendations</span></pre>
+                </div>
+            </details>
+
+            <!-- Salesforce Platform Mapping -->
+            <h3>Salesforce Platform Mapping</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>My Implementation (Today)</th>
+                        <th>Salesforce ES Production</th>
+                        <th>Notes</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>LangGraph state machine</td>
+                        <td><strong>Atlas Reasoning Engine</strong> (Agentforce)</td>
+                        <td>Same concept: multi-step reasoning with state management</td>
+                    </tr>
+                    <tr>
+                        <td>Agent Topics (Python dict)</td>
+                        <td><strong>Agentforce Topics</strong> (declarative config)</td>
+                        <td>Direct mapping — Topics define agent capabilities</td>
+                    </tr>
+                    <tr>
+                        <td>Agent Actions (tool functions)</td>
+                        <td><strong>Agentforce Actions</strong> (Flows + APEX + APIs)</td>
+                        <td>Actions invoke Flows, APEX, or external APIs</td>
+                    </tr>
+                    <tr>
+                        <td>Guardrails (Python rules)</td>
+                        <td><strong>Agentforce Guardrails</strong> (Trust Layer)</td>
+                        <td>Einstein Trust Layer provides PII masking, toxicity detection</td>
+                    </tr>
+                    <tr>
+                        <td>Adaptive RAG (LangGraph)</td>
+                        <td><strong>Atlas RAG</strong> (ensemble retrieval)</td>
+                        <td>Atlas uses ensemble RAG — same self-correcting pattern</td>
+                    </tr>
+                    <tr>
+                        <td>Vector DB (FAISS/Chroma)</td>
+                        <td><strong>Data360 vector search</strong></td>
+                        <td>Data360 supports vector embeddings natively</td>
+                    </tr>
+                    <tr>
+                        <td>Sentiment analysis (LLM)</td>
+                        <td><strong>Einstein AI</strong> sentiment classification</td>
+                        <td>Einstein provides pre-built sentiment models</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <!-- Implementation Roadmap -->
+            <h3>Implementation Roadmap</h3>
+            <div class="roadmap">
+                <div class="roadmap-phase">
+                    <h5>Phase 1 (Weeks 1-4): Data Foundation</h5>
+                    <ul>
+                        <li>Build NLP pipeline for survey comments and exit interviews</li>
+                        <li>Generate embeddings and load vector database</li>
+                        <li>Implement sentiment classification for unstructured feedback</li>
+                        <li>Topic extraction and theme clustering</li>
+                    </ul>
+                </div>
+                <div class="roadmap-phase">
+                    <h5>Phase 2 (Weeks 5-8): Agent Core</h5>
+                    <ul>
+                        <li>Implement adaptive reasoning graph (LangGraph → Agentforce-ready)</li>
+                        <li>Build agent tools (metrics query, feedback search, anomaly detection)</li>
+                        <li>Implement guardrails (PII protection, access control, bias detection)</li>
+                        <li>Deploy conversational interface (Slack or internal portal)</li>
+                    </ul>
+                </div>
+                <div class="roadmap-phase">
+                    <h5>Phase 3 (Weeks 9-12): Intelligence & Alerting</h5>
+                    <ul>
+                        <li>Add proactive anomaly detection and alerting</li>
+                        <li>Build recommendation engine with intervention tracking</li>
+                        <li>Implement self-check and correction loops</li>
+                        <li>Migrate to Agentforce-native deployment</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Expected Impact -->
+            <div class="impact-box">
+                <h4>Expected Impact</h4>
+                <ul>
+                    <li><strong>Hours → seconds</strong> for ad-hoc People Analytics queries</li>
+                    <li><strong>Proactive detection</strong> of attrition and engagement risks before they escalate</li>
+                    <li><strong>Root cause analysis</strong> combining quantitative metrics with qualitative feedback</li>
+                    <li><strong>Governed AI</strong> — PII protection, access control, and bias detection built-in</li>
+                    <li><strong>Foundation for Agentforce-native deployment</strong> — designed to map directly to Atlas Reasoning Engine</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- How They Connect Section -->
+        <section class="connection-diagram" id="how-connected">
+            <h3>How These POCs Connect</h3>
+            <div class="mermaid-container">
+                <div class="mermaid">
+graph LR
+    subgraph POC1["POC 1: ES Data360 Unifier"]
+        A["15+ HR Data Sources"]
+        B["Unified, Governed<br/>Employee Data"]
+        A --> B
+    end
+
+    subgraph POC2["POC 2: ES Metrics Semantic Layer"]
+        C["Trusted, Versioned<br/>People Analytics Metrics"]
+        B --> C
+    end
+
+    subgraph POC3["POC 3: ES Pulse Agent"]
+        D["Intelligent, Conversational<br/>Insight Delivery"]
+        C --> D
+    end
+                </div>
+            </div>
+            <p style="margin-top: 1.5rem; text-align: center; line-height: 1.8;">
+                <strong>POC 1</strong> integrates and governs the data → <strong>POC 2</strong> defines trusted metrics on that data → <strong>POC 3</strong> delivers insights from those metrics to stakeholders. Together, they represent the complete data-to-AI pipeline that Salesforce's Employee Success team needs.
+            </p>
+        </section>
+
+        <!-- About the Author Section -->
+        <section class="about-author">
+            <h2>About the Author</h2>
+            <p><strong>Roopmathi (Ruby) Gunna</strong> is a Senior Data Engineer with 10+ years building enterprise data platforms in regulated environments. At SMBC (VP-level), she designed the metadata-driven Master Controller ETL framework, built scalable medallion architectures processing 30M+ records, and established data governance foundations using Unity Catalog. She has hands-on experience building agentic RAG systems, Text-to-SQL applications, and AI-powered developer tools — consistently introducing AI innovation ahead of organizational mandates.</p>
+            <p>Every POC in this portfolio is grounded in patterns Ruby has built and deployed in production. The Salesforce platform mapping shows how these proven patterns transfer directly to Data360 and Agentforce.</p>
+            <p style="margin-top: 1.5rem;"><strong>Contact:</strong> <a href="mailto:roopmathi.gj@gmail.com" style="color: #ffd700;">roopmathi.gj@gmail.com</a></p>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <p><strong>Roopmathi (Ruby) Gunna</strong></p>
+        <p>Senior Data Engineer | Enterprise Data Architecture & AI Solutions</p>
+        <p style="margin-top: 1rem;"><a href="mailto:roopmathi.gj@gmail.com">roopmathi.gj@gmail.com</a></p>
+        <p style="margin-top: 1.5rem; font-size: 0.9rem; opacity: 0.9;">POC Portfolio prepared April 7, 2026 | Confidential — For Salesforce ES Hiring Consideration</p>
+    </footer>
+
+    <script>
+        // Initialize Mermaid with neutral theme
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'neutral',
+            securityLevel: 'loose'
+        });
+
+        // Active navigation indicator
+        function setActive(event) {
+            event.preventDefault();
+
+            // Remove active class from all links
+            document.querySelectorAll('nav a').forEach(link => {
+                link.classList.remove('active');
+            });
+
+            // Add active class to clicked link
+            event.target.classList.add('active');
+
+            // Navigate to section
+            const href = event.target.getAttribute('href');
+            const section = document.querySelector(href);
+            if (section) {
+                section.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        // Update active nav link on scroll
+        window.addEventListener('scroll', () => {
+            const sections = document.querySelectorAll('.poc-section, .connection-diagram');
+            let current = '';
+
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                if (window.pageYOffset >= sectionTop - 100) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            document.querySelectorAll('nav a').forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === '#' + current) {
+                    link.classList.add('active');
+                }
+            });
+        });
+
+        // Details/summary smooth interaction
+        document.querySelectorAll('details').forEach(detail => {
+            detail.addEventListener('toggle', function() {
+                if (this.open) {
+                    // Smooth scroll to the details element if it's below the fold
+                    const rect = this.getBoundingClientRect();
+                    if (rect.top > window.innerHeight) {
+                        this.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                }
+            });
+        });
+
+        // Print friendly - expand all details before printing
+        window.addEventListener('beforeprint', () => {
+            document.querySelectorAll('details').forEach(detail => {
+                detail.open = true;
+            });
+        });
+    </script>
+</body>
+</html>
