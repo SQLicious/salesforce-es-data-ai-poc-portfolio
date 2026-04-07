@@ -606,60 +606,6 @@
                  style="display: block; margin: 0 auto; width: auto; max-width: none; height: auto;">
             </div>
             
-graph TB
-    subgraph Sources["Data Sources"]
-        W["Workday HCM"]
-        SN["ServiceNow HRSD"]
-        Q["Qualtrics Surveys"]
-        SL["Slack Activity"]
-        P["Payroll Systems"]
-        L["Learning Platforms"]
-    end
-
-    subgraph Ingestion["Ingestion Layer"]
-        MC["Master Controller<br/>YAML Config per Source"]
-        API["API Connectors<br/>REST / CDC / Batch"]
-        PII["PII Auto-Classifier<br/>NLP + Regex"]
-    end
-
-    subgraph Bronze["Bronze Layer - Raw"]
-        B1["Raw Employee Records"]
-        B2["Raw Survey Responses"]
-        B3["Raw Activity Logs"]
-        BM["Bronze Metadata<br/>Source, Timestamp, Schema Version"]
-    end
-
-    subgraph Silver["Silver Layer - Cleaned & Governed"]
-        IR["Identity Resolution<br/>Probabilistic Matching"]
-        DQ["Data Quality<br/>Validation Rules"]
-        ENC["Field-Level Encryption<br/>PII Fields"]
-        GT["Governance Tags<br/>Access Control"]
-        S1["Unified Employee Profile"]
-        S2["Cleaned Survey Data"]
-        S3["Normalized Activity"]
-    end
-
-    subgraph Gold["Gold Layer - Business Ready"]
-        G1["Employee 360 View"]
-        G2["Attrition Feature Store"]
-        G3["Engagement Metrics"]
-        G4["Compensation Analytics"]
-    end
-
-    W & SN & Q & SL & P & L --> MC
-    MC --> API
-    API --> PII
-    PII --> B1 & B2 & B3
-    B1 & B2 & B3 --> BM
-    BM --> IR & DQ
-    IR --> ENC
-    DQ --> ENC
-    ENC --> GT
-    GT --> S1 & S2 & S3
-    S1 & S2 & S3 --> G1 & G2 & G3 & G4
-                </div>
-            </div>
-
             <!-- Technical Approach -->
             <h3>Technical Approach</h3>
 
