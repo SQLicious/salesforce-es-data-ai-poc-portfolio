@@ -968,7 +968,10 @@ SENSITIVE_COLUMN_NAMES = {
             <!-- Architecture Diagram -->
             <h3>Architecture Diagram</h3>
             <div class="mermaid-container">
-                <div class="mermaid">
+                    <img src="architecture_diagrams/POC2_ES_Metrics_Semantic_Layer_Architecture.png"
+                     alt="POC 2 ES Metrics Semantic Layer Architecture"
+                     style="max-width: 100%; height: auto; display: block; margin: 0 auto;">
+            </div>
 graph TB
     subgraph Gold["Gold Layer from POC 1"]
         E360["Employee 360 View"]
@@ -1230,7 +1233,10 @@ graph TB
             <!-- Architecture Diagram -->
             <h3>Architecture Diagram</h3>
             <div class="mermaid-container">
-                <div class="mermaid">
+                <img src="architecture_diagrams/POC3_ES_Pulse_Agent_Architecture.png"
+                     alt="POC 3 ES Pulse Agent Architecture"
+                     style="max-width: 100%; height: auto; display: block; margin: 0 auto;">
+            </div>
 graph TB
     subgraph Foundation["Data Foundation from POC 1 & 2"]
         MET["Semantic Metrics Layer<br/>Attrition, Engagement, DEI"]
@@ -1289,7 +1295,7 @@ AGENT_TOPICS = {
         <span class="string">"description"</span>: <span class="string">"Analyze employee attrition patterns and root causes"</span>,
         <span class="string">"triggers"</span>: [<span class="string">"attrition"</span>, <span class="string">"turnover"</span>, <span class="string">"leaving"</span>, <span class="string">"quit"</span>],
         <span class="string">"instructions"</span>: <span class="string">"""
-            1. Query semantic metrics layer for quantitative data
+            1. Query the semantic metrics layer for quantitative data
             2. Search exit interview embeddings for qualitative themes
             3. Correlate with engagement survey sentiment
             4. Identify top contributing factors with confidence scores
@@ -1516,24 +1522,9 @@ query transformation, and multi-hop reasoning.
         <section class="connection-diagram" id="how-connected">
             <h3>How These POCs Connect</h3>
             <div class="mermaid-container">
-                <div class="mermaid">
-graph LR
-    subgraph POC1["POC 1: ES Data360 Unifier"]
-        A["15+ HR Data Sources"]
-        B["Unified, Governed<br/>Employee Data"]
-        A --> B
-    end
-
-    subgraph POC2["POC 2: ES Metrics Semantic Layer"]
-        C["Trusted, Versioned<br/>People Analytics Metrics"]
-        B --> C
-    end
-
-    subgraph POC3["POC 3: ES Pulse Agent"]
-        D["Intelligent, Conversational<br/>Insight Delivery"]
-        C --> D
-    end
-                </div>
+                <img src="architecture_diagrams/POC_Connection_Overview.png"
+                     alt="POC Connection Overview"
+                     style="max-width: 100%; height: auto; display: block; margin: 0 auto;">
             </div>
             <p style="margin-top: 1.5rem; text-align: center; line-height: 1.8;">
                 <strong>POC 1</strong> integrates and governs the data → <strong>POC 2</strong> defines trusted metrics on that data → <strong>POC 3</strong> delivers insights from those metrics to stakeholders. Together, they represent the complete data-to-AI pipeline that Salesforce's Employee Success team needs.
