@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Salesforce ES POC Portfolio - Roopmathi Gunna</title>
-    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
     <style>
         * {
             margin: 0;
@@ -603,9 +602,10 @@
             <div class="mermaid-container">
             <img src="architecture_diagrams/POC1_ES_Data360_Unifier_Architecture.png"
                  alt="POC 1 ES Data360 Unifier Architecture"
-                 style="display: block; margin: 0 auto; width: auto; max-width: none; height: auto;">
+                 style="max-width: 100%; height: auto; display: block; margin: 0 auto;">
             </div>
             
+
             <!-- Technical Approach -->
             <h3>Technical Approach</h3>
 
@@ -918,43 +918,6 @@ SENSITIVE_COLUMN_NAMES = {
                      alt="POC 2 ES Metrics Semantic Layer Architecture"
                      style="max-width: 100%; height: auto; display: block; margin: 0 auto;">
             </div>
-graph TB
-    subgraph Gold["Gold Layer from POC 1"]
-        E360["Employee 360 View"]
-        COMP["Compensation Data"]
-        ENG["Engagement Survey Data"]
-        PERF["Performance Data"]
-        EXIT["Exit Interview Data"]
-    end
-
-    subgraph MetricDef["Metric Definition Layer"]
-        MD["Metric Definitions<br/>YAML/Version Controlled"]
-        VAL["Validation Engine<br/>Automated Quality Checks"]
-        LIN["Lineage Tracker<br/>Table → Metric → Dashboard"]
-    end
-
-    subgraph Compute["Metric Computation Engine"]
-        ATT["Attrition Metrics<br/>voluntary, involuntary,<br/>regretted, by cohort"]
-        ENGA["Engagement Metrics<br/>eNPS, satisfaction,<br/>sentiment score"]
-        CPH["Cost Metrics<br/>cost-per-hire,<br/>cost-of-attrition"]
-        MGR["Manager Metrics<br/>effectiveness score,<br/>team health index"]
-        DIV["DEI Metrics<br/>pay equity ratio,<br/>representation index"]
-    end
-
-    subgraph Consumption["Consumption Layer"]
-        DASH["Dashboards<br/>Tableau / CRM Analytics"]
-        AGENT["Agentforce Agents<br/>Natural Language Queries"]
-        ML["ML Feature Store<br/>Attrition & Engagement Models"]
-        API2["Self-Service API<br/>Governed Access"]
-    end
-
-    E360 & COMP & ENG & PERF & EXIT --> MD
-    MD --> VAL
-    VAL --> LIN
-    LIN --> ATT & ENGA & CPH & MGR & DIV
-    ATT & ENGA & CPH & MGR & DIV --> DASH & AGENT & ML & API2
-                </div>
-            </div>
 
             <!-- Technical Approach -->
             <h3>Technical Approach</h3>
@@ -1182,45 +1145,6 @@ graph TB
                 <img src="architecture_diagrams/POC3_ES_Pulse_Agent_Architecture.png"
                      alt="POC 3 ES Pulse Agent Architecture"
                      style="max-width: 100%; height: auto; display: block; margin: 0 auto;">
-            </div>
-graph TB
-    subgraph Foundation["Data Foundation from POC 1 & 2"]
-        MET["Semantic Metrics Layer<br/>Attrition, Engagement, DEI"]
-        E360["Employee 360 Profiles"]
-        SURV["Survey Comments<br/>Unstructured"]
-        EXIT2["Exit Interview Text<br/>Unstructured"]
-    end
-
-    subgraph NLP["NLP & Embedding Pipeline"]
-        SENT["Sentiment Analyzer<br/>LLM-based classification"]
-        EMB["Embedding Generator<br/>Text → Vectors"]
-        VDB["Vector Database<br/>Semantic Search Index"]
-        TOPIC["Topic Extractor<br/>Theme clustering"]
-    end
-
-    subgraph AgentCore["Agent Core - Agentforce Ready"]
-        REASON["Reasoning Engine<br/>Multi-step planning"]
-        TOOLS["Agent Tools<br/>Query metrics, search docs"]
-        GUARD["Guardrails<br/>PII filtering, access control"]
-        MEM["Conversation Memory<br/>Context across turns"]
-    end
-
-    subgraph Capabilities["Agent Capabilities"]
-        NLQ["Natural Language Queries<br/>'Why did attrition spike<br/>in Engineering?'"]
-        ALERT["Proactive Alerts<br/>'Team X engagement<br/>dropped 15% in 2 weeks'"]
-        RCA["Root Cause Analysis<br/>Autonomous multi-source<br/>correlation"]
-        REC["Recommendations<br/>'Implement stay bonuses<br/>for at-risk cohort'"]
-    end
-
-    MET & E360 & SURV & EXIT2 --> SENT & EMB
-    SENT --> TOPIC
-    EMB --> VDB
-    TOPIC & VDB & MET --> TOOLS
-    TOOLS --> REASON
-    REASON --> GUARD
-    GUARD --> MEM
-    MEM --> NLQ & ALERT & RCA & REC
-                </div>
             </div>
 
             <!-- Technical Approach -->
