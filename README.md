@@ -26,10 +26,5 @@ Each POC includes detailed architecture diagrams, technical approach with code s
 
 ![POC Connection Overview](architecture_diagrams/POC_Connection_Overview.png)
 
-## Built With
-
-Python, PySpark, SQL, LangGraph, RAG (Adaptive/Corrective/Self-RAG), RAGAS, YAML-driven orchestration — designed to map directly to Salesforce Data360, Agentforce, and the Atlas Reasoning Engine.
-
----
 
 *Prepared by [Roopmathi (Ruby) Gunna](https://www.linkedin.com/in/roopmathi-gunna/) — Senior Data Engineer specializing in enterprise data platforms and agentic AI.*
